@@ -8,6 +8,7 @@ namespace UnitTestingLab
     {
         // This is default money for user
         public static decimal defaultMoney = 5000.00m;
+
         public static void Main(string[] args)
         {
             try
@@ -71,7 +72,14 @@ namespace UnitTestingLab
                     decimal withdrawMoney = Convert.ToDecimal(Console.ReadLine());
 
                     // If user is withdrawing more than they have console return this statement
-                    if (withdrawMoney > defaultMoney)
+                    if (withdrawMoney < 0)
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"{name}, please use deposit functionality to add money");
+                        Console.ResetColor();
+                    }
+                    else if (withdrawMoney > defaultMoney)
                     {
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -130,7 +138,7 @@ namespace UnitTestingLab
                 Console.WriteLine("You have enter wrong format, please try correct input");
                 return false;
             }
-            catch (OverflowException e)
+            catch (OverflowException)
             {
                 Console.WriteLine($"You took out/deposit too much money {name}");
                 return false;
@@ -145,13 +153,12 @@ namespace UnitTestingLab
             // method to withdraw cash
         public static decimal WithdrawCash(decimal money)
         {
+            // counting that if user have entered in the -negative value
+            if (money < 0) { return defaultMoney; }
             // taking out the money
             defaultMoney -= money;
             // if user is taking out more than you have it initialize it to 1
-            if (defaultMoney < 0)
-            {
-                defaultMoney = 1;
-            }
+            if (defaultMoney < 0) { defaultMoney = 1;}
             return defaultMoney;
         }
 
@@ -159,10 +166,7 @@ namespace UnitTestingLab
         public static decimal DepositCash(decimal money)
         {
             // if the user put negative vaue it will throw exception that will be caught in catch prior stack catch block
-            if (money < 0)
-            {
-                return defaultMoney;
-            }
+            if (money < 0) { return defaultMoney;}
             defaultMoney += money;
             return defaultMoney;
         }
