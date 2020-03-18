@@ -27,6 +27,7 @@ namespace UnitTestingLab
 
                 Console.WriteLine("");
                 Console.WriteLine($"Thank you for playing {userName}");
+                Environment.Exit(0);
             }
             catch (Exception e)
             {
@@ -68,11 +69,12 @@ namespace UnitTestingLab
                 {
                     // Asking user how much they want to withdraw
                     Console.WriteLine("How much do you want to withdraw?");
-                    decimal withdrawMoney = Convert.ToInt32(Console.ReadLine());
+                    decimal withdrawMoney = Convert.ToDecimal(Console.ReadLine());
 
                     // If user is withdrawing more than they have console return this statement
                     if (withdrawMoney > defaultMoney)
                     {
+                        Console.Clear();
                         Console.WriteLine($"{name}, you took out more than current balance, you will only receive {defaultMoney-1}");
                         decimal resultMoney = WithdrawCash(withdrawMoney);
                     }
@@ -80,13 +82,27 @@ namespace UnitTestingLab
                     else
                     {
                         decimal resultMoney = WithdrawCash(withdrawMoney);
+                        Console.Clear();
                         Console.WriteLine($"{name}, you took out {withdrawMoney}");
                     }
                 }
                 // To deposit money
                 else if (userChoice == 3)
                 {
-                    //DepositCash(name);
+                    Console.WriteLine("How much do you want to deposit?");
+                    decimal despositMoney = Convert.ToDecimal(Console.ReadLine());
+                    if (despositMoney < 0)
+                    {
+                        Console.WriteLine("Please use withdraw option to get money");
+                        Console.Clear();
+                        return false;
+                    }
+                    else
+                    {
+                        DepositCash(despositMoney);
+                        Console.Clear();
+                        Console.WriteLine($"You deposit {despositMoney}");
+                    }
                 }
                 // Exit mode
                 else if (userChoice == 4)
@@ -124,6 +140,13 @@ namespace UnitTestingLab
                 defaultMoney -= money;
                 if (defaultMoney < 0)
                     defaultMoney = 1;
+                return defaultMoney;
+            }
+
+            // method to deposit cash
+            static decimal DepositCash(decimal money)
+            {
+                defaultMoney += money;
                 return defaultMoney;
             }
         }
