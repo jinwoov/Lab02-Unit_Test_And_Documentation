@@ -24,16 +24,17 @@ namespace UnitTestingLab
                 {
                     menuBool = Interface(userName);
                 }
-
-                Console.WriteLine("");
-                Console.WriteLine($"Thank you for playing {userName}");
-                Environment.Exit(0);
             }
             catch (Exception e)
             {
                 Console.WriteLine($"You have invalid choice {e.Message}");
             }
-           
+            finally
+            {
+                Console.WriteLine("");
+                Console.WriteLine("Thank you!");
+                Environment.Exit(0);
+            }
         }
 
         public static bool Interface(string name)
@@ -62,7 +63,9 @@ namespace UnitTestingLab
                 else if (userChoice == 1)
                 {
                     Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Your Balance is {defaultMoney}");
+                    Console.ResetColor();
                 }
                 // To Withdraw the money
                 else if (userChoice == 2)
@@ -75,8 +78,10 @@ namespace UnitTestingLab
                     if (withdrawMoney > defaultMoney)
                     {
                         Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"{name}, you took out more than current balance, you will only receive {defaultMoney-1}");
-                        decimal resultMoney = WithdrawCash(withdrawMoney);
+                        Console.ResetColor();
+                        WithdrawCash(withdrawMoney);
                     }
                     // If user has enough money this will invoke 
                     else
@@ -89,20 +94,14 @@ namespace UnitTestingLab
                 // To deposit money
                 else if (userChoice == 3)
                 {
+                    // Asking how much user wants to deposit
                     Console.WriteLine("How much do you want to deposit?");
                     decimal despositMoney = Convert.ToDecimal(Console.ReadLine());
-                    if (despositMoney < 0)
-                    {
-                        Console.WriteLine("Please use withdraw option to get money");
-                        Console.Clear();
-                        return false;
-                    }
-                    else
-                    {
-                        DepositCash(despositMoney);
-                        Console.Clear();
-                        Console.WriteLine($"You deposit {despositMoney}");
-                    }
+                    DepositCash(despositMoney);
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"You deposit {despositMoney}");
+                    Console.ResetColor();
                 }
                 // Exit mode
                 else if (userChoice == 4)
@@ -133,7 +132,12 @@ namespace UnitTestingLab
                 Console.WriteLine("You have entered incorrect data type input, please try again");
                 return false;
             }
-
+            // message from that it is invalid 
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
             // method to withdraw cash
             static decimal WithdrawCash(decimal money)
             {
@@ -146,6 +150,9 @@ namespace UnitTestingLab
             // method to deposit cash
             static decimal DepositCash(decimal money)
             {
+                // if the user put negative vaue it will throw exception that will be caught in catch prior stack catch block
+                if (money < 0)
+                    throw new ArgumentException("Please use withdraw option to get negative money");
                 defaultMoney += money;
                 return defaultMoney;
             }
