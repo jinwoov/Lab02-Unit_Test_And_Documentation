@@ -11,7 +11,7 @@ namespace bankunittest
         public void CanIDeposit()
         {
             //Arrange
-            Program.defaultMoney = 5000;
+            Program.defaultMoney = 5000m;
             // Act and Assert
             Assert.Equal(6000, Program.DepositCash(1000));
         }
@@ -21,9 +21,9 @@ namespace bankunittest
         public void CanIWithDraw()
         {
             //Arrange
-            Program.defaultMoney = 5000;
+            Program.defaultMoney = 5000m;
             // Act and Assert
-            Assert.Equal(1000, Program.WithdrawCash(4000));
+            Assert.Equal(1000m, Program.WithdrawCash(4000m));
         }
 
         // Testing if I can deposit negative number
@@ -53,9 +53,9 @@ namespace bankunittest
         public void CanIputNegativeAmountForWithdrawal()
         {
             //arrange
-            Program.defaultMoney = 5000;
+            Program.defaultMoney = 5000m;
             // Act and Assert
-            Assert.Equal(5000, Program.WithdrawCash(-2000));
+            Assert.Equal(5000m, Program.WithdrawCash(-2000m));
 
         }
     }
