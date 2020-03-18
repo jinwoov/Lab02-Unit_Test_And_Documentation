@@ -66,10 +66,22 @@ namespace UnitTestingLab
                 // To Withdraw the money
                 else if (userChoice == 2)
                 {
+                    // Asking user how much they want to withdraw
                     Console.WriteLine("How much do you want to withdraw?");
                     decimal withdrawMoney = Convert.ToInt32(Console.ReadLine());
-                    decimal resultMoney = WithdrawCash(withdrawMoney);
-                    Console.WriteLine($"{name}, you took out {withdrawMoney}");
+
+                    // If user is withdrawing more than they have console return this statement
+                    if (withdrawMoney > defaultMoney)
+                    {
+                        Console.WriteLine($"{name}, you took out more than current balance, you will only receive {defaultMoney-1}");
+                        decimal resultMoney = WithdrawCash(withdrawMoney);
+                    }
+                    // If user has enough money this will invoke 
+                    else
+                    {
+                        decimal resultMoney = WithdrawCash(withdrawMoney);
+                        Console.WriteLine($"{name}, you took out {withdrawMoney}");
+                    }
                 }
                 // To deposit money
                 else if (userChoice == 3)
@@ -110,6 +122,8 @@ namespace UnitTestingLab
             static decimal WithdrawCash(decimal money)
             {
                 defaultMoney -= money;
+                if (defaultMoney < 0)
+                    defaultMoney = 1;
                 return defaultMoney;
             }
         }
