@@ -13,6 +13,7 @@ namespace UnitTestingLab
         {
             try
             {
+                // Little dorky opening sign
                 Console.WriteLine(@"
                                 #================#
                                 # G-Unit Testing #
@@ -20,6 +21,8 @@ namespace UnitTestingLab
                                 #================#");
                 Console.WriteLine("What is your name");
                 string userName = Console.ReadLine();
+
+                // Running the application in continous loop until user choose to exit
                 bool menuBool = false;
                 while (!menuBool)
                 {
@@ -33,7 +36,11 @@ namespace UnitTestingLab
                 Environment.Exit(0);
             }
         }
-
+        /// <summary>
+        /// Interface methods that ties all of the method
+        /// </summary>
+        /// <param name="name">User Name</param>
+        /// <returns>Boolean statment that will continue or turn off the application</returns>
         public static bool Interface(string name)
         {
             try
@@ -47,7 +54,8 @@ namespace UnitTestingLab
                 Console.WriteLine($"3. Deposit Money");
                 Console.WriteLine($"4. Exit");
 
-                // Choice will be saved in the 
+                // Choice will be saved in the userChoice variable 
+                /// If the choice isn't int type, error will prompt from catch
                 int userChoice = Convert.ToInt32(Console.ReadLine());
 
                 // This is to disallow user to put choice that is not within the option
@@ -71,14 +79,15 @@ namespace UnitTestingLab
                     Console.WriteLine("How much do you want to withdraw?");
                     decimal withdrawMoney = Convert.ToDecimal(Console.ReadLine());
 
-                    // If user is withdrawing more than they have console return this statement
+                    // Making sure that user doesn't enter negative value or withdrawing money
                     if (withdrawMoney < 0)
                     {
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"{name}, please use deposit functionality to add money");
+                        Console.WriteLine($"{name}, we will take out money for you please enter positive value");
                         Console.ResetColor();
                     }
+                    // If user is withdrawing more than they have console return this statement
                     else if (withdrawMoney > defaultMoney)
                     {
                         Console.Clear();
@@ -95,16 +104,18 @@ namespace UnitTestingLab
                         Console.WriteLine($"{name}, you took out {withdrawMoney}");
                     }
                 }
-                // To deposit money
+                // Option for depositing money
                 else if (userChoice == 3)
                 {
                     // Asking how much user wants to deposit
                     Console.WriteLine("How much do you want to deposit?");
                     decimal depositMoney = Convert.ToDecimal(Console.ReadLine());
+                    // Counting for user entering in negative value and throw an exception if it is negative value.
                     if (depositMoney < 0)
                     {
                         throw new Exception("Please enter positive number");
                     }
+                    // Running the deposit method and showing how much they put into their account
                     else
                     {
                         DepositCash(depositMoney);
@@ -114,7 +125,7 @@ namespace UnitTestingLab
                         Console.ResetColor();
                     }
                 }
-                // Exit mode
+                // Option for exiting application
                 else if (userChoice == 4)
                 {
                     return true;
@@ -123,7 +134,7 @@ namespace UnitTestingLab
                 // Checking with user if they continue again
                 Console.WriteLine($"{name}, would you like to continue? (y/n)");
                 string lastChoice = Console.ReadLine().ToLower();
-                if (lastChoice == "y")
+                if (lastChoice == "y"|| lastChoice == "yes")
                 {
                     return false;
                 }
@@ -150,7 +161,11 @@ namespace UnitTestingLab
             }
         }
 
-            // method to withdraw cash
+        /// <summary>
+        /// Withdrawing method that will take money out and outputs current balance
+        /// </summary>
+        /// <param name="money">Amount of money that user wants to take out</param>
+        /// <returns>User's current balance</returns>
         public static decimal WithdrawCash(decimal money)
         {
             // counting that if user have entered in the -negative value
@@ -162,11 +177,16 @@ namespace UnitTestingLab
             return defaultMoney;
         }
 
-            // method to deposit cash
+        /// <summary>
+        /// Depositing method that will put the money into he balance depending on user's choice
+        /// </summary>
+        /// <param name="money">Amount of money that user wants to put</param>
+        /// <returns>Current Balance</returns>
         public static decimal DepositCash(decimal money)
         {
             // if the user put negative vaue it will throw exception that will be caught in catch prior stack catch block
             if (money < 0) { return defaultMoney;}
+            // Otherwise this method continues and adds money to current balance
             defaultMoney += money;
             return defaultMoney;
         }
