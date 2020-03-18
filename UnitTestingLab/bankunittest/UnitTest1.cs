@@ -49,5 +49,14 @@ namespace bankunittest
             //Act and Assert
             Assert.Equal(exp, Program.WithdrawCash(act));
         }
+        [Fact]
+        public void CanIputNegativeAmountForWithdrawal()
+        {
+            //arrange
+            Program.defaultMoney = 5000;
+            // Act and Assert
+            Assert.Equal(5000, Program.WithdrawCash(-2000));
+
+        }
     }
 }
