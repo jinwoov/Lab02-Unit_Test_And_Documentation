@@ -50,29 +50,39 @@ namespace UnitTestingLab
 
                 // Choice will be saved in the 
                 int userChoice = Convert.ToInt32(Console.ReadLine());
+
+                // This is to disallow user to put choice that is not within the option
                 if (userChoice > 4)
                 {
                     Console.WriteLine($"Please enter within the choice {name}");
                     return false;
                 }
+                // To Check the balance
                 else if (userChoice == 1)
                 {
                     Console.Clear();
                     Console.WriteLine($"Your Balance is {defaultMoney}");
                 }
+                // To Withdraw the money
                 else if (userChoice == 2)
                 {
-                    //WithdrawCash(name);
+                    Console.WriteLine("How much do you want to withdraw?");
+                    decimal withdrawMoney = Convert.ToInt32(Console.ReadLine());
+                    decimal resultMoney = WithdrawCash(withdrawMoney);
+                    Console.WriteLine($"{name}, you took out {withdrawMoney}");
                 }
+                // To deposit money
                 else if (userChoice == 3)
                 {
                     //DepositCash(name);
                 }
+                // Exit mode
                 else if (userChoice == 4)
                 {
                     return true;
                 }
 
+                // Checking with user if they continue again
                 Console.WriteLine($"{name}, would you like to continue? (y/n)");
                 string lastChoice = Console.ReadLine().ToLower();
                 if (lastChoice == "y")
@@ -96,6 +106,12 @@ namespace UnitTestingLab
                 return false;
             }
 
+            // method to withdraw cash
+            static decimal WithdrawCash(decimal money)
+            {
+                defaultMoney -= money;
+                return defaultMoney;
+            }
         }
     }
 }
