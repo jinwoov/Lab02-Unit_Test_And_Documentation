@@ -25,10 +25,6 @@ namespace UnitTestingLab
                     menuBool = Interface(userName);
                 }
             }
-            catch (Exception e)
-            {
-                Console.WriteLine($"You have invalid choice {e.Message}");
-            }
             finally
             {
                 Console.WriteLine("");
@@ -54,7 +50,7 @@ namespace UnitTestingLab
                 int userChoice = Convert.ToInt32(Console.ReadLine());
 
                 // This is to disallow user to put choice that is not within the option
-                if (userChoice > 4)
+                if (userChoice > 4 || userChoice <= 0)
                 {
                     Console.WriteLine($"Please enter within the choice {name}");
                     return false;
@@ -79,7 +75,7 @@ namespace UnitTestingLab
                     {
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"{name}, you took out more than current balance, you will only receive {defaultMoney-1}");
+                        Console.WriteLine($"{name}, you took out more than current balance, you will only receive {defaultMoney - 1}");
                         Console.ResetColor();
                         WithdrawCash(withdrawMoney);
                     }
@@ -96,12 +92,19 @@ namespace UnitTestingLab
                 {
                     // Asking how much user wants to deposit
                     Console.WriteLine("How much do you want to deposit?");
-                    decimal despositMoney = Convert.ToDecimal(Console.ReadLine());
-                    DepositCash(despositMoney);
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"You deposit {despositMoney}");
-                    Console.ResetColor();
+                    decimal depositMoney = Convert.ToDecimal(Console.ReadLine());
+                    if (depositMoney < 0)
+                    {
+                        throw new Exception("Please enter positive number");
+                    }
+                    else
+                    {
+                        DepositCash(depositMoney);
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"You deposit {depositMoney}");
+                        Console.ResetColor();
+                    }
                 }
                 // Exit mode
                 else if (userChoice == 4)
@@ -127,35 +130,41 @@ namespace UnitTestingLab
                 Console.WriteLine("You have enter wrong format, please try correct input");
                 return false;
             }
-            catch (OverflowException)
+            catch (OverflowException e)
             {
-                Console.WriteLine("You have entered incorrect data type input, please try again");
+                Console.WriteLine($"You took out/deposit too much money {name}");
                 return false;
             }
-            // message from that it is invalid 
-            catch (ArgumentException e)
+            catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"You have invalid choice {e.Message}");
                 return false;
             }
+        }
+
             // method to withdraw cash
-            static decimal WithdrawCash(decimal money)
+        public static decimal WithdrawCash(decimal money)
+        {
+            // taking out the money
+            defaultMoney -= money;
+            // if user is taking out more than you have it initialize it to 1
+            if (defaultMoney < 0)
             {
-                defaultMoney -= money;
-                if (defaultMoney < 0)
-                    defaultMoney = 1;
-                return defaultMoney;
+                defaultMoney = 1;
             }
+            return defaultMoney;
+        }
 
             // method to deposit cash
-            static decimal DepositCash(decimal money)
+        public static decimal DepositCash(decimal money)
+        {
+            // if the user put negative vaue it will throw exception that will be caught in catch prior stack catch block
+            if (money < 0)
             {
-                // if the user put negative vaue it will throw exception that will be caught in catch prior stack catch block
-                if (money < 0)
-                    throw new ArgumentException("Please use withdraw option to get negative money");
-                defaultMoney += money;
                 return defaultMoney;
             }
+            defaultMoney += money;
+            return defaultMoney;
         }
     }
 }
